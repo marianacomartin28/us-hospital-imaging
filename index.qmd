@@ -1,0 +1,148 @@
+---
+title: "Outpatient Medical Imaging Quality Across U.S. Hospitals"
+author: "Mariana Comartin"
+format:
+  html:
+    embed-resources: true
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r}
+library(tidyverse)
+```
+
+## Project Overview
+
+For my final data science project, I am analyzing the [Outpatient Imaging Efficiency - Hospital](https://data.cms.gov/provider-data/dataset/wkfw-kthe) dataset published by the Centers for Medicare & Medicaid Services (CMS). This dataset tracks how hospitals across the United States use outpatient medical imaging tests, such as CT scans and mammography screenings, to evaluate efficiency and patient safety in diagnostic care.
+
+In this project, I plan to explore key variables including hospital locations (states, cities, and ZIP codes), specific imaging measures (`Measure ID` and `Measure Name`), hospital efficiency `Score` values, and reporting dates (`Start Date` and `End Date`). By examining these variables together, I aim to compare medical imaging quality across different hospitals and states to see where outpatient imaging is used most effectively.
+
+I chose this topic because I plan to become an ultrasound technician and want to learn more about medical imaging in healthcare. Understanding how imaging efficiency and recall rates are measured across facilities will give me valuable perspective on quality standards and patient care in diagnostic imaging.
+
+## Distribution of Outpatient Imaging Measure Percentages
+
+```{r}
+#| fig-width: 8.5
+#| fig-height: 6
+#| fig-dpi: 300
+
+# Load the CMS Outpatient Imaging Efficiency dataset directly from CMS
+imaging_url <- "https://data.cms.gov/provider-data/sites/default/files/resources/d0134a9a89e59d49426cf5a2ad063b60_1785189966/Outpatient_Imaging_Efficiency-Hospital.csv"
+
+# Clean percentage values and create a clear label combining Measure ID and Measure Name
+imaging_clean <- read_csv(imaging_url, show_col_types = FALSE) |>
+  filter(Score != "Not Available") |>
+  mutate(
+    Score = as.numeric(Score),
+    Measure = paste0(`Measure ID`, ": ", `Measure Name`)
+  )
+
+# Compute exact summary statistics per measure to display on the graphic
+imaging_stats <- imaging_clean |>
+  group_by(Measure) |>
+  summarise(
+    n_hospitals = n(),
+    q25_pct = quantile(Score, 0.25),
+    median_pct = median(Score),
+    q75_pct = quantile(Score, 0.75),
+    max_pct = max(Score),
+    label_text = paste0(
+      "Hospitals reporting: ", format(n_hospitals, big.mark = ","),
+      "\nMiddle 50% (IQR): ", sprintf("%.1f%% – %.1f%%", q25_pct, q75_pct),
+      "\nMedian: ", sprintf("%.1f%%", median_pct),
+      "   |   Max: ", sprintf("%.1f%%", max_pct)
+    ),
+    .groups = "drop"
+  )
+
+# Plot the distribution of hospital percentages for OP-10 and OP-39
+imaging_clean |>
+  ggplot(aes(x = Score, fill = Measure, color = Measure)) +
+  geom_rect(
+    data = imaging_stats,
+    aes(xmin = q25_pct, xmax = q75_pct, ymin = -Inf, ymax = Inf),
+    inherit.aes = FALSE,
+    fill = "#cbd5e1",
+    alpha = 0.45
+  ) +
+  geom_histogram(
+    binwidth = 1.5,
+    boundary = 0,
+    color = "white",
+    linewidth = 0.25,
+    alpha = 0.9
+  ) +
+  geom_rug(
+    sides = "b",
+    alpha = 0.35,
+    length = unit(0.055, "npc")
+  ) +
+  geom_vline(
+    data = imaging_stats,
+    aes(xintercept = median_pct),
+    linetype = "dashed",
+    color = "#0f172a",
+    linewidth = 0.75
+  ) +
+  geom_label(
+    data = imaging_stats,
+    aes(x = 79, y = Inf, label = label_text),
+    hjust = 1,
+    vjust = 1.2,
+    size = 3.3,
+    lineheight = 1.15,
+    fontface = "plain",
+    color = "#1e293b",
+    fill = "#f8fafc",
+    label.size = 0.3,
+    label.padding = unit(0.45, "lines"),
+    inherit.aes = FALSE
+  ) +
+  facet_wrap(~ Measure, scales = "free_y", ncol = 1) +
+  scale_x_continuous(
+    breaks = seq(0, 80, by = 10),
+    labels = \(x) paste0(x, "%"),
+    limits = c(0, 80),
+    expand = expansion(mult = c(0.01, 0.02))
+  ) +
+  scale_y_continuous(
+    expand = expansion(mult = c(0.08, 0.12))
+  ) +
+  scale_fill_manual(values = c("#1d4ed8", "#d97706")) +
+  scale_color_manual(values = c("#1d4ed8", "#d97706"), guide = "none") +
+  labs(
+    title = "Distribution of Outpatient Imaging Measure Percentages Across U.S. Hospitals",
+    subtitle = "Shaded band marks the middle 50% of hospitals; dashed line marks the median; bottom ticks show individual hospitals",
+    x = "Hospital Measure Percentage (% of Outpatient Imaging Studies)",
+    y = "Number of Hospitals",
+    fill = "CMS Imaging Measure",
+    caption = "Source: CMS Outpatient Imaging Efficiency Dataset (wkfw-kthe), July 2024 – June 2025."
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.background = element_rect(fill = "#ffffff", color = NA),
+    panel.grid.minor = element_blank(),
+    panel.grid.major.x = element_line(color = "#e2e8f0", linewidth = 0.4),
+    panel.grid.major.y = element_line(color = "#e2e8f0", linewidth = 0.4),
+    panel.spacing = unit(1.2, "lines"),
+    strip.background = element_rect(fill = "#f1f5f9", color = NA),
+    strip.text = element_text(face = "bold", size = 11, color = "#0f172a", margin = margin(6, 6, 6, 6)),
+    plot.title = element_text(face = "bold", size = 13.5, color = "#0f172a"),
+    plot.subtitle = element_text(size = 10, color = "#475569", margin = margin(b = 10)),
+    axis.title = element_text(face = "bold", size = 10.5, color = "#1e293b"),
+    axis.text = element_text(color = "#334155"),
+    legend.position = "bottom",
+    legend.title = element_text(face = "bold", size = 10),
+    legend.text = element_text(size = 9.5),
+    plot.caption = element_text(size = 8.5, color = "#64748b", margin = margin(t = 8))
+  )
+```
+
+This graphic compares the distribution of reported hospital percentages between July 2024 and June 2025 for the two measures in the CMS dataset: **OP-10 (Abdomen CT Use of Contrast Material)** across 3,914 hospitals and **OP-39 (Breast Cancer Screening Recall Rates)** across 3,255 hospitals. **OP-10** represents the percentage of outpatient abdominal CT scans performed both with and without intravenous contrast; in this dataset, half of reporting hospitals fall between 3.0% and 7.6% (median 5.0%), with a right-skewed tail reaching 61.7%. **OP-39** represents the percentage of patients recalled within 45 days after a screening mammogram or digital breast tomosynthesis for follow-up imaging (such as diagnostic mammography, ultrasound, or MRI); its middle 50% of hospitals fall between 4.7% and 8.9% (median 6.6%), with outliers extending up to 78.0%.
+
+Importantly, lower percentages do not always indicate better hospital performance, nor do these two measures represent overall hospital quality. For **OP-10**, avoiding routine double-contrast CT scans reduces unnecessary radiation exposure, but combined studies are still clinically appropriate for certain diagnoses. For **OP-39**, a recall rate that is too high can cause unnecessary follow-up imaging and patient anxiety, whereas a recall rate that is too low could mean missed cancers. From these data, we can reasonably conclude that most U.S. hospitals cluster below 10% on both measures, while a small number of facilities exhibit substantially higher rates that may reflect differences in patient populations, clinical protocols, or facility specialization rather than overall hospital quality.
+
+

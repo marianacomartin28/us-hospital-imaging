@@ -1,0 +1,30 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Outpatient Medical Imaging Quality Across U.S. Hospitals",
+    "section": "",
+    "text": "For my final data science project, I am analyzing the Outpatient Imaging Efficiency - Hospital dataset published by the Centers for Medicare & Medicaid Services (CMS). This dataset tracks how hospitals across the United States use outpatient medical imaging tests, such as CT scans and mammography screenings, to evaluate efficiency and patient safety in diagnostic care.\nIn this project, I plan to explore key variables including hospital locations (states, cities, and ZIP codes), specific imaging measures (Measure ID and Measure Name), hospital efficiency Score values, and reporting dates (Start Date and End Date). By examining these variables together, I aim to compare medical imaging quality across different hospitals and states to see where outpatient imaging is used most effectively.\nI chose this topic because I plan to become an ultrasound technician and want to learn more about medical imaging in healthcare. Understanding how imaging efficiency and recall rates are measured across facilities will give me valuable perspective on quality standards and patient care in diagnostic imaging."
+  },
+  {
+    "objectID": "index.html#project-overview",
+    "href": "index.html#project-overview",
+    "title": "Outpatient Medical Imaging Quality Across U.S. Hospitals",
+    "section": "",
+    "text": "For my final data science project, I am analyzing the Outpatient Imaging Efficiency - Hospital dataset published by the Centers for Medicare & Medicaid Services (CMS). This dataset tracks how hospitals across the United States use outpatient medical imaging tests, such as CT scans and mammography screenings, to evaluate efficiency and patient safety in diagnostic care.\nIn this project, I plan to explore key variables including hospital locations (states, cities, and ZIP codes), specific imaging measures (Measure ID and Measure Name), hospital efficiency Score values, and reporting dates (Start Date and End Date). By examining these variables together, I aim to compare medical imaging quality across different hospitals and states to see where outpatient imaging is used most effectively.\nI chose this topic because I plan to become an ultrasound technician and want to learn more about medical imaging in healthcare. Understanding how imaging efficiency and recall rates are measured across facilities will give me valuable perspective on quality standards and patient care in diagnostic imaging."
+  },
+  {
+    "objectID": "index.html#distribution-of-outpatient-imaging-measure-percentages",
+    "href": "index.html#distribution-of-outpatient-imaging-measure-percentages",
+    "title": "Outpatient Medical Imaging Quality Across U.S. Hospitals",
+    "section": "Distribution of Outpatient Imaging Measure Percentages",
+    "text": "Distribution of Outpatient Imaging Measure Percentages\n\n\n\n\n\n\n\n\n\nThis graphic compares the distribution of reported hospital percentages between July 2024 and June 2025 for the two measures in the CMS dataset: OP-10 (Abdomen CT Use of Contrast Material) across 3,914 hospitals and OP-39 (Breast Cancer Screening Recall Rates) across 3,255 hospitals. OP-10 represents the percentage of outpatient abdominal CT scans performed both with and without intravenous contrast; in this dataset, half of reporting hospitals fall between 3.0% and 7.6% (median 5.0%), with a right-skewed tail reaching 61.7%. OP-39 represents the percentage of patients recalled within 45 days after a screening mammogram or digital breast tomosynthesis for follow-up imaging (such as diagnostic mammography, ultrasound, or MRI); its middle 50% of hospitals fall between 4.7% and 8.9% (median 6.6%), with outliers extending up to 78.0%.\nImportantly, lower percentages do not always indicate better hospital performance, nor do these two measures represent overall hospital quality. For OP-10, avoiding routine double-contrast CT scans reduces unnecessary radiation exposure, but combined studies are still clinically appropriate for certain diagnoses. For OP-39, a recall rate that is too high can cause unnecessary follow-up imaging and patient anxiety, whereas a recall rate that is too low could mean missed cancers. From these data, we can reasonably conclude that most U.S. hospitals cluster below 10% on both measures, while a small number of facilities exhibit substantially higher rates that may reflect differences in patient populations, clinical protocols, or facility specialization rather than overall hospital quality."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site"
+  }
+]

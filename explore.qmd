@@ -1,0 +1,97 @@
+
+
+---
+title: "Explore Hospital Imaging Data"
+---
+
+## Explore Outpatient Imaging Measures
+
+This interactive graph allows you to explore imaging measure percentages reported by hospitals across the United States.
+
+You can select an imaging measure, hover over the graph to see values, and zoom in on different parts of the distribution.
+
+```{r}
+#| warning: false
+#| message: false
+
+library(tidyverse)
+library(plotly)
+
+imaging_url <- "https://data.cms.gov/provider-data/sites/default/files/resources/d0134a9a89e59d49426cf5a2ad063b60_1785189966/Outpatient_Imaging_Efficiency-Hospital.csv"
+
+imaging_clean <- read_csv(imaging_url, show_col_types = FALSE) |>
+  filter(Score != "Not Available") |>
+  mutate(
+    Score = as.numeric(Score)
+  )
+
+op10 <- imaging_clean |>
+  filter(`Measure ID` == "OP-10")
+
+op39 <- imaging_clean |>
+  filter(`Measure ID` == "OP-39")
+
+p <- plot_ly() |>
+  add_histogram(
+    data = op10,
+    x = ~Score,
+    name = "OP-10: Abdomen CT",
+    xbins = list(size = 1.5),
+    marker = list(color = "#1d4ed8"),
+    opacity = 0.7
+  ) |>
+  add_histogram(
+    data = op39,
+    x = ~Score,
+    name = "OP-39: Breast Screening",
+    xbins = list(size = 1.5),
+    marker = list(color = "#d97706"),
+    opacity = 0.7
+  ) |>
+  layout(
+    title = "Hospital Imaging Measure Distributions",
+    xaxis = list(title = "Hospital Measure Percentage (%)"),
+    yaxis = list(title = "Number of Hospitals"),
+    barmode = "overlay",
+    updatemenus = list(
+      list(
+        type = "dropdown",
+        buttons = list(
+          list(
+            method = "update",
+            args = list(
+              list(visible = c(TRUE, TRUE)),
+              list(title = "Both Imaging Measures")
+            ),
+            label = "Both Measures"
+          ),
+          list(
+            method = "update",
+            args = list(
+              list(visible = c(TRUE, FALSE)),
+              list(title = "Abdomen CT (OP-10)")
+            ),
+            label = "Abdomen CT (OP-10)"
+          ),
+          list(
+            method = "update",
+            args = list(
+              list(visible = c(FALSE, TRUE)),
+              list(title = "Breast Screening (OP-39)")
+            ),
+            label = "Breast Screening (OP-39)"
+          )
+        )
+      )
+    )
+  )
+
+p
+```
+
+## Understanding the Measures
+
+- **OP-10:** Measures the use of contrast material in outpatient abdominal CT scans.
+- **OP-39:** Measures breast cancer screening recall rates.
+
+These measures help illustrate differences in outpatient imaging practices across hospitals.

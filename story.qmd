@@ -1,0 +1,16 @@
+
+# Imaging Across the United States
+
+## How Does Outpatient Imaging Differ Across Hospitals?
+
+Medical imaging is an important part of modern healthcare. Hospitals use imaging technologies such as X-rays, CT scans, MRIs, and ultrasounds to help diagnose medical conditions.
+
+However, imaging services and performance measures can vary between hospitals.
+
+This project examines outpatient imaging data from hospitals across the United States using publicly available CMS data.
+
+## Why Does This Matter?
+
+Understanding differences in outpatient imaging can help patients and healthcare professionals learn more about hospital performance, imaging services, and healthcare quality.
+
+The data can also help identify patterns and differences between hospitals.

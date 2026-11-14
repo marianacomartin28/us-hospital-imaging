@@ -1,5 +1,26 @@
 [
   {
+    "objectID": "explore.html",
+    "href": "explore.html",
+    "title": "Explore Hospital Imaging Data",
+    "section": "",
+    "text": "This interactive graph allows you to explore imaging measure percentages reported by hospitals across the United States.\nYou can select an imaging measure, hover over the graph to see values, and zoom in on different parts of the distribution.\n\nlibrary(tidyverse)\nlibrary(plotly)\n\nimaging_url &lt;- \"https://data.cms.gov/provider-data/sites/default/files/resources/d0134a9a89e59d49426cf5a2ad063b60_1785189966/Outpatient_Imaging_Efficiency-Hospital.csv\"\n\nimaging_clean &lt;- read_csv(imaging_url, show_col_types = FALSE) |&gt;\n  filter(Score != \"Not Available\") |&gt;\n  mutate(\n    Score = as.numeric(Score)\n  )\n\nop10 &lt;- imaging_clean |&gt;\n  filter(`Measure ID` == \"OP-10\")\n\nop39 &lt;- imaging_clean |&gt;\n  filter(`Measure ID` == \"OP-39\")\n\np &lt;- plot_ly() |&gt;\n  add_histogram(\n    data = op10,\n    x = ~Score,\n    name = \"OP-10: Abdomen CT\",\n    xbins = list(size = 1.5),\n    marker = list(color = \"#1d4ed8\"),\n    opacity = 0.7\n  ) |&gt;\n  add_histogram(\n    data = op39,\n    x = ~Score,\n    name = \"OP-39: Breast Screening\",\n    xbins = list(size = 1.5),\n    marker = list(color = \"#d97706\"),\n    opacity = 0.7\n  ) |&gt;\n  layout(\n    title = \"Hospital Imaging Measure Distributions\",\n    xaxis = list(title = \"Hospital Measure Percentage (%)\"),\n    yaxis = list(title = \"Number of Hospitals\"),\n    barmode = \"overlay\",\n    updatemenus = list(\n      list(\n        type = \"dropdown\",\n        buttons = list(\n          list(\n            method = \"update\",\n            args = list(\n              list(visible = c(TRUE, TRUE)),\n              list(title = \"Both Imaging Measures\")\n            ),\n            label = \"Both Measures\"\n          ),\n          list(\n            method = \"update\",\n            args = list(\n              list(visible = c(TRUE, FALSE)),\n              list(title = \"Abdomen CT (OP-10)\")\n            ),\n            label = \"Abdomen CT (OP-10)\"\n          ),\n          list(\n            method = \"update\",\n            args = list(\n              list(visible = c(FALSE, TRUE)),\n              list(title = \"Breast Screening (OP-39)\")\n            ),\n            label = \"Breast Screening (OP-39)\"\n          )\n        )\n      )\n    )\n  )\n\np"
+  },
+  {
+    "objectID": "explore.html#explore-outpatient-imaging-measures",
+    "href": "explore.html#explore-outpatient-imaging-measures",
+    "title": "Explore Hospital Imaging Data",
+    "section": "",
+    "text": "This interactive graph allows you to explore imaging measure percentages reported by hospitals across the United States.\nYou can select an imaging measure, hover over the graph to see values, and zoom in on different parts of the distribution.\n\nlibrary(tidyverse)\nlibrary(plotly)\n\nimaging_url &lt;- \"https://data.cms.gov/provider-data/sites/default/files/resources/d0134a9a89e59d49426cf5a2ad063b60_1785189966/Outpatient_Imaging_Efficiency-Hospital.csv\"\n\nimaging_clean &lt;- read_csv(imaging_url, show_col_types = FALSE) |&gt;\n  filter(Score != \"Not Available\") |&gt;\n  mutate(\n    Score = as.numeric(Score)\n  )\n\nop10 &lt;- imaging_clean |&gt;\n  filter(`Measure ID` == \"OP-10\")\n\nop39 &lt;- imaging_clean |&gt;\n  filter(`Measure ID` == \"OP-39\")\n\np &lt;- plot_ly() |&gt;\n  add_histogram(\n    data = op10,\n    x = ~Score,\n    name = \"OP-10: Abdomen CT\",\n    xbins = list(size = 1.5),\n    marker = list(color = \"#1d4ed8\"),\n    opacity = 0.7\n  ) |&gt;\n  add_histogram(\n    data = op39,\n    x = ~Score,\n    name = \"OP-39: Breast Screening\",\n    xbins = list(size = 1.5),\n    marker = list(color = \"#d97706\"),\n    opacity = 0.7\n  ) |&gt;\n  layout(\n    title = \"Hospital Imaging Measure Distributions\",\n    xaxis = list(title = \"Hospital Measure Percentage (%)\"),\n    yaxis = list(title = \"Number of Hospitals\"),\n    barmode = \"overlay\",\n    updatemenus = list(\n      list(\n        type = \"dropdown\",\n        buttons = list(\n          list(\n            method = \"update\",\n            args = list(\n              list(visible = c(TRUE, TRUE)),\n              list(title = \"Both Imaging Measures\")\n            ),\n            label = \"Both Measures\"\n          ),\n          list(\n            method = \"update\",\n            args = list(\n              list(visible = c(TRUE, FALSE)),\n              list(title = \"Abdomen CT (OP-10)\")\n            ),\n            label = \"Abdomen CT (OP-10)\"\n          ),\n          list(\n            method = \"update\",\n            args = list(\n              list(visible = c(FALSE, TRUE)),\n              list(title = \"Breast Screening (OP-39)\")\n            ),\n            label = \"Breast Screening (OP-39)\"\n          )\n        )\n      )\n    )\n  )\n\np"
+  },
+  {
+    "objectID": "explore.html#understanding-the-measures",
+    "href": "explore.html#understanding-the-measures",
+    "title": "Explore Hospital Imaging Data",
+    "section": "Understanding the Measures",
+    "text": "Understanding the Measures\n\nOP-10: Measures the use of contrast material in outpatient abdominal CT scans.\nOP-39: Measures breast cancer screening recall rates.\n\nThese measures help illustrate differences in outpatient imaging practices across hospitals."
+  },
+  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Outpatient Medical Imaging Quality Across U.S. Hospitals",
@@ -19,6 +40,27 @@
     "title": "Outpatient Medical Imaging Quality Across U.S. Hospitals",
     "section": "Distribution of Outpatient Imaging Measure Percentages",
     "text": "Distribution of Outpatient Imaging Measure Percentages\n\n\n\n\n\n\n\n\n\nThis graphic compares the distribution of reported hospital percentages between July 2024 and June 2025 for the two measures in the CMS dataset: OP-10 (Abdomen CT Use of Contrast Material) across 3,914 hospitals and OP-39 (Breast Cancer Screening Recall Rates) across 3,255 hospitals. OP-10 represents the percentage of outpatient abdominal CT scans performed both with and without intravenous contrast; in this dataset, half of reporting hospitals fall between 3.0% and 7.6% (median 5.0%), with a right-skewed tail reaching 61.7%. OP-39 represents the percentage of patients recalled within 45 days after a screening mammogram or digital breast tomosynthesis for follow-up imaging (such as diagnostic mammography, ultrasound, or MRI); its middle 50% of hospitals fall between 4.7% and 8.9% (median 6.6%), with outliers extending up to 78.0%.\nImportantly, lower percentages do not always indicate better hospital performance, nor do these two measures represent overall hospital quality. For OP-10, avoiding routine double-contrast CT scans reduces unnecessary radiation exposure, but combined studies are still clinically appropriate for certain diagnoses. For OP-39, a recall rate that is too high can cause unnecessary follow-up imaging and patient anxiety, whereas a recall rate that is too low could mean missed cancers. From these data, we can reasonably conclude that most U.S. hospitals cluster below 10% on both measures, while a small number of facilities exhibit substantially higher rates that may reflect differences in patient populations, clinical protocols, or facility specialization rather than overall hospital quality."
+  },
+  {
+    "objectID": "story.html",
+    "href": "story.html",
+    "title": "Imaging Across the United States",
+    "section": "",
+    "text": "Medical imaging is an important part of modern healthcare. Hospitals use imaging technologies such as X-rays, CT scans, MRIs, and ultrasounds to help diagnose medical conditions.\nHowever, imaging services and performance measures can vary between hospitals.\nThis project examines outpatient imaging data from hospitals across the United States using publicly available CMS data.\n\n\n\nUnderstanding differences in outpatient imaging can help patients and healthcare professionals learn more about hospital performance, imaging services, and healthcare quality.\nThe data can also help identify patterns and differences between hospitals."
+  },
+  {
+    "objectID": "story.html#how-does-outpatient-imaging-differ-across-hospitals",
+    "href": "story.html#how-does-outpatient-imaging-differ-across-hospitals",
+    "title": "Imaging Across the United States",
+    "section": "",
+    "text": "Medical imaging is an important part of modern healthcare. Hospitals use imaging technologies such as X-rays, CT scans, MRIs, and ultrasounds to help diagnose medical conditions.\nHowever, imaging services and performance measures can vary between hospitals.\nThis project examines outpatient imaging data from hospitals across the United States using publicly available CMS data."
+  },
+  {
+    "objectID": "story.html#why-does-this-matter",
+    "href": "story.html#why-does-this-matter",
+    "title": "Imaging Across the United States",
+    "section": "",
+    "text": "Understanding differences in outpatient imaging can help patients and healthcare professionals learn more about hospital performance, imaging services, and healthcare quality.\nThe data can also help identify patterns and differences between hospitals."
   },
   {
     "objectID": "about.html",

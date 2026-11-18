@@ -4,21 +4,42 @@
     "href": "explore.html",
     "title": "Explore Hospital Imaging Data",
     "section": "",
-    "text": "This interactive graph allows you to explore imaging measure percentages reported by hospitals across the United States.\nYou can select an imaging measure, hover over the graph to see values, and zoom in on different parts of the distribution.\n\nlibrary(tidyverse)\nlibrary(plotly)\n\nimaging_url &lt;- \"https://data.cms.gov/provider-data/sites/default/files/resources/d0134a9a89e59d49426cf5a2ad063b60_1785189966/Outpatient_Imaging_Efficiency-Hospital.csv\"\n\nimaging_clean &lt;- read_csv(imaging_url, show_col_types = FALSE) |&gt;\n  filter(Score != \"Not Available\") |&gt;\n  mutate(\n    Score = as.numeric(Score)\n  )\n\nop10 &lt;- imaging_clean |&gt;\n  filter(`Measure ID` == \"OP-10\")\n\nop39 &lt;- imaging_clean |&gt;\n  filter(`Measure ID` == \"OP-39\")\n\np &lt;- plot_ly() |&gt;\n  add_histogram(\n    data = op10,\n    x = ~Score,\n    name = \"OP-10: Abdomen CT\",\n    xbins = list(size = 1.5),\n    marker = list(color = \"#1d4ed8\"),\n    opacity = 0.7\n  ) |&gt;\n  add_histogram(\n    data = op39,\n    x = ~Score,\n    name = \"OP-39: Breast Screening\",\n    xbins = list(size = 1.5),\n    marker = list(color = \"#d97706\"),\n    opacity = 0.7\n  ) |&gt;\n  layout(\n    title = \"Hospital Imaging Measure Distributions\",\n    xaxis = list(title = \"Hospital Measure Percentage (%)\"),\n    yaxis = list(title = \"Number of Hospitals\"),\n    barmode = \"overlay\",\n    updatemenus = list(\n      list(\n        type = \"dropdown\",\n        buttons = list(\n          list(\n            method = \"update\",\n            args = list(\n              list(visible = c(TRUE, TRUE)),\n              list(title = \"Both Imaging Measures\")\n            ),\n            label = \"Both Measures\"\n          ),\n          list(\n            method = \"update\",\n            args = list(\n              list(visible = c(TRUE, FALSE)),\n              list(title = \"Abdomen CT (OP-10)\")\n            ),\n            label = \"Abdomen CT (OP-10)\"\n          ),\n          list(\n            method = \"update\",\n            args = list(\n              list(visible = c(FALSE, TRUE)),\n              list(title = \"Breast Screening (OP-39)\")\n            ),\n            label = \"Breast Screening (OP-39)\"\n          )\n        )\n      )\n    )\n  )\n\np"
+    "text": "These interactive charts use the CMS reporting period July 1, 2024–June 30, 2025. Each record is a hospital’s reported percentage for one measure. Select or hide measures in the legend, and hover over marks for details.\n\n\nEach bar counts hospitals whose reported percentage falls in that score range. The measures are overlaid for comparison; use the menu to view either measure alone.\n\n\n\n\n\n\n\n\n\nBars show the median reported percentage among hospitals with an available score in each state or territory. A median summarizes a group; it is not a hospital rating, and differences can reflect many factors beyond care quality."
   },
   {
-    "objectID": "explore.html#explore-outpatient-imaging-measures",
-    "href": "explore.html#explore-outpatient-imaging-measures",
+    "objectID": "explore.html#explore-the-reported-measures",
+    "href": "explore.html#explore-the-reported-measures",
     "title": "Explore Hospital Imaging Data",
     "section": "",
-    "text": "This interactive graph allows you to explore imaging measure percentages reported by hospitals across the United States.\nYou can select an imaging measure, hover over the graph to see values, and zoom in on different parts of the distribution.\n\nlibrary(tidyverse)\nlibrary(plotly)\n\nimaging_url &lt;- \"https://data.cms.gov/provider-data/sites/default/files/resources/d0134a9a89e59d49426cf5a2ad063b60_1785189966/Outpatient_Imaging_Efficiency-Hospital.csv\"\n\nimaging_clean &lt;- read_csv(imaging_url, show_col_types = FALSE) |&gt;\n  filter(Score != \"Not Available\") |&gt;\n  mutate(\n    Score = as.numeric(Score)\n  )\n\nop10 &lt;- imaging_clean |&gt;\n  filter(`Measure ID` == \"OP-10\")\n\nop39 &lt;- imaging_clean |&gt;\n  filter(`Measure ID` == \"OP-39\")\n\np &lt;- plot_ly() |&gt;\n  add_histogram(\n    data = op10,\n    x = ~Score,\n    name = \"OP-10: Abdomen CT\",\n    xbins = list(size = 1.5),\n    marker = list(color = \"#1d4ed8\"),\n    opacity = 0.7\n  ) |&gt;\n  add_histogram(\n    data = op39,\n    x = ~Score,\n    name = \"OP-39: Breast Screening\",\n    xbins = list(size = 1.5),\n    marker = list(color = \"#d97706\"),\n    opacity = 0.7\n  ) |&gt;\n  layout(\n    title = \"Hospital Imaging Measure Distributions\",\n    xaxis = list(title = \"Hospital Measure Percentage (%)\"),\n    yaxis = list(title = \"Number of Hospitals\"),\n    barmode = \"overlay\",\n    updatemenus = list(\n      list(\n        type = \"dropdown\",\n        buttons = list(\n          list(\n            method = \"update\",\n            args = list(\n              list(visible = c(TRUE, TRUE)),\n              list(title = \"Both Imaging Measures\")\n            ),\n            label = \"Both Measures\"\n          ),\n          list(\n            method = \"update\",\n            args = list(\n              list(visible = c(TRUE, FALSE)),\n              list(title = \"Abdomen CT (OP-10)\")\n            ),\n            label = \"Abdomen CT (OP-10)\"\n          ),\n          list(\n            method = \"update\",\n            args = list(\n              list(visible = c(FALSE, TRUE)),\n              list(title = \"Breast Screening (OP-39)\")\n            ),\n            label = \"Breast Screening (OP-39)\"\n          )\n        )\n      )\n    )\n  )\n\np"
+    "text": "These interactive charts use the CMS reporting period July 1, 2024–June 30, 2025. Each record is a hospital’s reported percentage for one measure. Select or hide measures in the legend, and hover over marks for details.\n\n\nEach bar counts hospitals whose reported percentage falls in that score range. The measures are overlaid for comparison; use the menu to view either measure alone.\n\n\n\n\n\n\n\n\n\nBars show the median reported percentage among hospitals with an available score in each state or territory. A median summarizes a group; it is not a hospital rating, and differences can reflect many factors beyond care quality."
   },
   {
-    "objectID": "explore.html#understanding-the-measures",
-    "href": "explore.html#understanding-the-measures",
+    "objectID": "explore.html#measure-guide",
+    "href": "explore.html#measure-guide",
     "title": "Explore Hospital Imaging Data",
-    "section": "Understanding the Measures",
-    "text": "Understanding the Measures\n\nOP-10: Measures the use of contrast material in outpatient abdominal CT scans.\nOP-39: Measures breast cancer screening recall rates.\n\nThese measures help illustrate differences in outpatient imaging practices across hospitals."
+    "section": "Measure guide",
+    "text": "Measure guide\n\nOP-10 — Abdomen CT Use of Contrast Material: The reported percentage of outpatient abdominal CT examinations performed both with and without contrast.\nOP-39 — Breast Cancer Screening Recall Rates: The reported percentage of screening mammograms followed by diagnostic imaging within 45 days.\n\nThe measures describe different processes and should not be read as a single score of hospital quality. The CMS dataset provides hospital-level reported percentages; it does not explain why a particular hospital’s value differs."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "This project was created by Mariana Comartin for a final college data science project.\n\nEmail: m.comartin28@ncf.edu\nGitHub: marianacomartin28\nProject repository: marianacomartin28/milestone-5\nCollege: New College of Florida"
+  },
+  {
+    "objectID": "about.html#about-mariana",
+    "href": "about.html#about-mariana",
+    "title": "About",
+    "section": "",
+    "text": "This project was created by Mariana Comartin for a final college data science project.\n\nEmail: m.comartin28@ncf.edu\nGitHub: marianacomartin28\nProject repository: marianacomartin28/milestone-5\nCollege: New College of Florida"
+  },
+  {
+    "objectID": "about.html#data-source",
+    "href": "about.html#data-source",
+    "title": "About",
+    "section": "Data source",
+    "text": "Data source\nThe analysis uses the Centers for Medicare & Medicaid Services (CMS) Outpatient Imaging Efficiency – Hospital dataset (dataset ID: wkfw-kthe). It contains hospital-level reported percentages for measures including abdomen CT use of contrast (OP-10) and breast cancer screening recall rates (OP-39), along with facility location and reporting-period fields. The charts describe these reported measures; they do not establish why hospitals differ or provide a complete assessment of care quality.\nFor field definitions, see the CMS hospital data dictionary (PDF)."
   },
   {
     "objectID": "index.html",
@@ -39,34 +60,83 @@
     "href": "index.html#distribution-of-outpatient-imaging-measure-percentages",
     "title": "Outpatient Medical Imaging Quality Across U.S. Hospitals",
     "section": "Distribution of Outpatient Imaging Measure Percentages",
-    "text": "Distribution of Outpatient Imaging Measure Percentages\n\n\n\n\n\n\n\n\n\nThis graphic compares the distribution of reported hospital percentages between July 2024 and June 2025 for the two measures in the CMS dataset: OP-10 (Abdomen CT Use of Contrast Material) across 3,914 hospitals and OP-39 (Breast Cancer Screening Recall Rates) across 3,255 hospitals. OP-10 represents the percentage of outpatient abdominal CT scans performed both with and without intravenous contrast; in this dataset, half of reporting hospitals fall between 3.0% and 7.6% (median 5.0%), with a right-skewed tail reaching 61.7%. OP-39 represents the percentage of patients recalled within 45 days after a screening mammogram or digital breast tomosynthesis for follow-up imaging (such as diagnostic mammography, ultrasound, or MRI); its middle 50% of hospitals fall between 4.7% and 8.9% (median 6.6%), with outliers extending up to 78.0%.\nImportantly, lower percentages do not always indicate better hospital performance, nor do these two measures represent overall hospital quality. For OP-10, avoiding routine double-contrast CT scans reduces unnecessary radiation exposure, but combined studies are still clinically appropriate for certain diagnoses. For OP-39, a recall rate that is too high can cause unnecessary follow-up imaging and patient anxiety, whereas a recall rate that is too low could mean missed cancers. From these data, we can reasonably conclude that most U.S. hospitals cluster below 10% on both measures, while a small number of facilities exhibit substantially higher rates that may reflect differences in patient populations, clinical protocols, or facility specialization rather than overall hospital quality."
+    "text": "Distribution of Outpatient Imaging Measure Percentages\n\n\n\n\n\n\n\n\n\nThis graphic compares the distribution of reported hospital percentages between July 2024 and June 2025 for the two measures in the CMS dataset: OP-10 (Abdomen CT Use of Contrast Material) across 3,904 hospitals and OP-39 (Breast Cancer Screening Recall Rates) across 3,247 hospitals. OP-10 represents the percentage of outpatient abdominal CT scans performed both with and without contrast material; in this dataset, half of reporting hospitals fall between 3.0% and 7.6% (median 5.0%), with a right-skewed tail reaching 61.7%. OP-39 represents the percentage of patients recalled within 45 days after a screening mammogram or digital breast tomosynthesis for follow-up imaging (such as diagnostic mammography, ultrasound, or MRI); its middle 50% of hospitals fall between 4.7% and 8.9% (median 6.6%), with outliers extending up to 78.0%.\nImportantly, lower percentages do not always indicate better hospital performance, nor do these two measures represent overall hospital quality. For OP-10, avoiding routine double-contrast CT scans reduces unnecessary radiation exposure, but combined studies are still clinically appropriate for certain diagnoses. For OP-39, a recall rate that is too high can cause unnecessary follow-up imaging and patient anxiety, whereas a recall rate that is too low could mean missed cancers. From these data, we can reasonably conclude that most U.S. hospitals cluster below 10% on both measures, while a small number of facilities exhibit substantially higher rates that may reflect differences in patient populations, clinical protocols, or facility specialization rather than overall hospital quality."
   },
   {
     "objectID": "story.html",
     "href": "story.html",
-    "title": "Imaging Across the United States",
+    "title": "Hospital Comparisons",
     "section": "",
-    "text": "Medical imaging is an important part of modern healthcare. Hospitals use imaging technologies such as X-rays, CT scans, MRIs, and ultrasounds to help diagnose medical conditions.\nHowever, imaging services and performance measures can vary between hospitals.\nThis project examines outpatient imaging data from hospitals across the United States using publicly available CMS data.\n\n\n\nUnderstanding differences in outpatient imaging can help patients and healthcare professionals learn more about hospital performance, imaging services, and healthcare quality.\nThe data can also help identify patterns and differences between hospitals."
+    "text": "Each point represents one hospital with available scores for both CMS measures during July 1, 2024–June 30, 2025. Hover over a point to see the hospital name, state, and both reported percentages.\nThe measures describe different imaging processes and use different clinical contexts. This chart is for exploring reported values—not for ranking hospitals or interpreting the relationship as a measure of quality."
   },
   {
-    "objectID": "story.html#how-does-outpatient-imaging-differ-across-hospitals",
-    "href": "story.html#how-does-outpatient-imaging-differ-across-hospitals",
-    "title": "Imaging Across the United States",
+    "objectID": "story.html#compare-hospitals-reporting-both-measures",
+    "href": "story.html#compare-hospitals-reporting-both-measures",
+    "title": "Hospital Comparisons",
     "section": "",
-    "text": "Medical imaging is an important part of modern healthcare. Hospitals use imaging technologies such as X-rays, CT scans, MRIs, and ultrasounds to help diagnose medical conditions.\nHowever, imaging services and performance measures can vary between hospitals.\nThis project examines outpatient imaging data from hospitals across the United States using publicly available CMS data."
+    "text": "Each point represents one hospital with available scores for both CMS measures during July 1, 2024–June 30, 2025. Hover over a point to see the hospital name, state, and both reported percentages.\nThe measures describe different imaging processes and use different clinical contexts. This chart is for exploring reported values—not for ranking hospitals or interpreting the relationship as a measure of quality."
   },
   {
-    "objectID": "story.html#why-does-this-matter",
-    "href": "story.html#why-does-this-matter",
-    "title": "Imaging Across the United States",
-    "section": "",
-    "text": "Understanding differences in outpatient imaging can help patients and healthcare professionals learn more about hospital performance, imaging services, and healthcare quality.\nThe data can also help identify patterns and differences between hospitals."
+    "objectID": "story.html#op-10-and-op-39-reported-percentages",
+    "href": "story.html#op-10-and-op-39-reported-percentages",
+    "title": "Hospital Comparisons",
+    "section": "OP-10 and OP-39 reported percentages",
+    "text": "OP-10 and OP-39 reported percentages\nUse the hover details to inspect individual facilities. Hospitals missing either score are not shown; missing values are not treated as zero.\n\n\n\n\n\n\nOP-10 tracks outpatient abdominal CT examinations performed both with and without contrast. OP-39 tracks screening mammograms followed by diagnostic imaging within 45 days. See the CMS dataset for the source records."
   },
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
+    "objectID": "mammography.html",
+    "href": "mammography.html",
+    "title": "Mammography",
     "section": "",
-    "text": "About this site"
+    "text": "OP-39 — Breast Cancer Screening Recall Rates reports the percentage of screening mammograms followed by diagnostic imaging within 45 days. Follow-up may include additional mammography, ultrasound, or MRI.\nA recall can be a necessary part of screening, while unnecessary follow-up can add cost and anxiety. The rate alone cannot distinguish appropriate follow-up from avoidable callbacks, and it should not be treated as a stand-alone measure of a hospital’s overall quality.\nThe charts below use hospitals with an available OP-39 score in the July 1, 2024–June 30, 2025 reporting period."
+  },
+  {
+    "objectID": "mammography.html#what-op-39-measures",
+    "href": "mammography.html#what-op-39-measures",
+    "title": "Mammography",
+    "section": "",
+    "text": "OP-39 — Breast Cancer Screening Recall Rates reports the percentage of screening mammograms followed by diagnostic imaging within 45 days. Follow-up may include additional mammography, ultrasound, or MRI.\nA recall can be a necessary part of screening, while unnecessary follow-up can add cost and anxiety. The rate alone cannot distinguish appropriate follow-up from avoidable callbacks, and it should not be treated as a stand-alone measure of a hospital’s overall quality.\nThe charts below use hospitals with an available OP-39 score in the July 1, 2024–June 30, 2025 reporting period."
+  },
+  {
+    "objectID": "mammography.html#distribution-across-hospitals",
+    "href": "mammography.html#distribution-across-hospitals",
+    "title": "Mammography",
+    "section": "Distribution across hospitals",
+    "text": "Distribution across hospitals\nEach bar counts reporting hospitals in a score range. Explore the shape of the distribution, but remember that the reported percentage is not a direct measure of cancer detection or patient outcomes."
+  },
+  {
+    "objectID": "mammography.html#compare-median-scores-by-state-or-territory",
+    "href": "mammography.html#compare-median-scores-by-state-or-territory",
+    "title": "Mammography",
+    "section": "Compare median scores by state or territory",
+    "text": "Compare median scores by state or territory\nThe state or territory median summarizes available hospital scores; it does not adjust for patient populations or clinical context and is not a ranking of care quality.\n\n\n\n\n\n\nFor measure specifications and source data, see the CMS Outpatient Imaging Efficiency dataset."
+  },
+  {
+    "objectID": "ct-imaging.html",
+    "href": "ct-imaging.html",
+    "title": "CT Imaging",
+    "section": "",
+    "text": "OP-10 — Abdomen CT Use of Contrast Material reports the percentage of a hospital’s outpatient abdominal CT examinations performed both with and without contrast. Looking at both sets of images can be clinically appropriate in some situations, so a higher percentage is not, by itself, proof of poor care.\nThis CMS measure concerns one specific CT practice; it is not a measure of every CT scan or of overall hospital quality. The charts below show hospitals with an available OP-10 score in the July 1, 2024–June 30, 2025 reporting period."
+  },
+  {
+    "objectID": "ct-imaging.html#what-op-10-measures",
+    "href": "ct-imaging.html#what-op-10-measures",
+    "title": "CT Imaging",
+    "section": "",
+    "text": "OP-10 — Abdomen CT Use of Contrast Material reports the percentage of a hospital’s outpatient abdominal CT examinations performed both with and without contrast. Looking at both sets of images can be clinically appropriate in some situations, so a higher percentage is not, by itself, proof of poor care.\nThis CMS measure concerns one specific CT practice; it is not a measure of every CT scan or of overall hospital quality. The charts below show hospitals with an available OP-10 score in the July 1, 2024–June 30, 2025 reporting period."
+  },
+  {
+    "objectID": "ct-imaging.html#distribution-across-hospitals",
+    "href": "ct-imaging.html#distribution-across-hospitals",
+    "title": "CT Imaging",
+    "section": "Distribution across hospitals",
+    "text": "Distribution across hospitals\nEach bar represents the number of reporting hospitals in a score range. The interactive chart lets you inspect individual bins; the percentage is the CMS-reported score, not a patient-level rate calculated here."
+  },
+  {
+    "objectID": "ct-imaging.html#compare-median-scores-by-state-or-territory",
+    "href": "ct-imaging.html#compare-median-scores-by-state-or-territory",
+    "title": "CT Imaging",
+    "section": "Compare median scores by state or territory",
+    "text": "Compare median scores by state or territory\nThis chart summarizes reporting hospitals with a median for each state or territory. It is descriptive: differences do not account for patient mix, clinical reasons for imaging, or other factors.\n\n\n\n\n\n\nFor measure specifications and source data, see the CMS Outpatient Imaging Efficiency dataset."
   }
 ]

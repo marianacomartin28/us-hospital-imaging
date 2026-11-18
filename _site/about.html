@@ -6,6 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="description" content="About the student, project, and CMS outpatient imaging data.">
 
 <title>About – U.S. Hospital Imaging Quality</title>
 <style>
@@ -101,12 +102,22 @@ ul.task-list li input[type="checkbox"] {
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./explore.html"> 
-<span class="menu-text">Explore Hospital Imaging</span></a>
+<span class="menu-text">Explore</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./ct-imaging.html"> 
+<span class="menu-text">CT Imaging</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./mammography.html"> 
+<span class="menu-text">Mammography</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./story.html"> 
-<span class="menu-text">Imaging Across the U.S.</span></a>
+<span class="menu-text">Hospital Comparisons</span></a>
   </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
     <a class="nav-link active" href="./about.html" aria-current="page"> 
 <span class="menu-text">About</span></a>
@@ -123,8 +134,15 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#about-mariana" id="toc-about-mariana" class="nav-link active" data-scroll-target="#about-mariana">About Mariana</a></li>
+  <li><a href="#data-source" id="toc-data-source" class="nav-link" data-scroll-target="#data-source">Data source</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content" tabindex="-1">
@@ -134,6 +152,11 @@ ul.task-list li input[type="checkbox"] {
 <h1 class="title">About</h1>
 </div>
 
+<div>
+  <div class="description">
+    About the student, project, and CMS outpatient imaging data.
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
@@ -148,9 +171,23 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>About this site</p>
+<section id="about-mariana" class="level2">
+<h2 class="anchored" data-anchor-id="about-mariana">About Mariana</h2>
+<p>This project was created by <strong>Mariana Comartin</strong> for a final college data science project.</p>
+<ul>
+<li><strong>Email:</strong> <a href="mailto:m.comartin28@ncf.edu">m.comartin28@ncf.edu</a></li>
+<li><strong>GitHub:</strong> <a href="https://github.com/marianacomartin28">marianacomartin28</a></li>
+<li><strong>Project repository:</strong> <a href="https://github.com/marianacomartin28/milestone-5">marianacomartin28/milestone-5</a></li>
+<li><strong>College:</strong> <a href="https://www.ncf.edu/">New College of Florida</a></li>
+</ul>
+</section>
+<section id="data-source" class="level2">
+<h2 class="anchored" data-anchor-id="data-source">Data source</h2>
+<p>The analysis uses the Centers for Medicare &amp; Medicaid Services (CMS) <strong>Outpatient Imaging Efficiency – Hospital</strong> dataset (<a href="https://data.cms.gov/provider-data/dataset/wkfw-kthe">dataset ID: wkfw-kthe</a>). It contains hospital-level reported percentages for measures including abdomen CT use of contrast (OP-10) and breast cancer screening recall rates (OP-39), along with facility location and reporting-period fields. The charts describe these reported measures; they do not establish why hospitals differ or provide a complete assessment of care quality.</p>
+<p>For field definitions, see the <a href="https://data.cms.gov/provider-data/sites/default/files/data_dictionaries/hospital/HOSPITAL_Data_Dictionary.pdf">CMS hospital data dictionary (PDF)</a>.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -226,7 +263,7 @@ ul.task-list li input[type="checkbox"] {
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("https:\/\/marianacomartin28\.github\.io\/milestone-5\/");
+        var filterRegex = new RegExp('/' + window.location.host + '/');
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }

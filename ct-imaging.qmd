@@ -1,0 +1,79 @@
+---
+title: "CT Imaging"
+description: "Explore CMS measure OP-10, Abdomen CT Use of Contrast Material."
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+## What OP-10 measures
+
+**OP-10 — Abdomen CT Use of Contrast Material** reports the percentage of a hospital's outpatient abdominal CT examinations performed both with and without contrast. Looking at both sets of images can be clinically appropriate in some situations, so a higher percentage is not, by itself, proof of poor care.
+
+This CMS measure concerns one specific CT practice; it is not a measure of every CT scan or of overall hospital quality. The charts below show hospitals with an available OP-10 score in the July 1, 2024–June 30, 2025 reporting period.
+
+```{r}
+library(tidyverse)
+library(plotly)
+
+imaging_url <- "https://data.cms.gov/provider-data/sites/default/files/resources/d0134a9a89e59d49426cf5a2ad063b60_1792599881/Outpatient_Imaging_Efficiency-Hospital.csv"
+
+ct_scores <- read_csv(imaging_url, show_col_types = FALSE) |>
+  filter(`Measure ID` == "OP-10", Score != "Not Available") |>
+  mutate(Score = as.numeric(Score))
+```
+
+## Distribution across hospitals
+
+Each bar represents the number of reporting hospitals in a score range. The interactive chart lets you inspect individual bins; the percentage is the CMS-reported score, not a patient-level rate calculated here.
+
+```{r}
+plot_ly(
+  data = ct_scores,
+  x = ~Score,
+  type = "histogram",
+  xbins = list(size = 1.5),
+  marker = list(color = "#167d8d")
+) |>
+  layout(
+    title = "OP-10 Abdomen CT Scores Across Hospitals",
+    xaxis = list(title = "Reported OP-10 percentage (%)"),
+    yaxis = list(title = "Number of hospitals")
+  )
+```
+
+## Compare median scores by state or territory
+
+This chart summarizes reporting hospitals with a median for each state or territory. It is descriptive: differences do not account for patient mix, clinical reasons for imaging, or other factors.
+
+```{r}
+ct_by_state <- ct_scores |>
+  group_by(State) |>
+  summarise(
+    median_score = median(Score),
+    hospitals = n(),
+    .groups = "drop"
+  ) |>
+  arrange(median_score)
+
+plot_ly(
+  data = ct_by_state,
+  x = ~median_score,
+  y = ~reorder(State, median_score),
+  type = "bar",
+  orientation = "h",
+  marker = list(color = "#167d8d"),
+  text = ~paste0("Hospitals with scores: ", hospitals),
+  hovertemplate = "%{y}<br>Median: %{x:.1f}%<br>%{text}<extra></extra>"
+) |>
+  layout(
+    title = "Median OP-10 Score by State or Territory",
+    xaxis = list(title = "Median reported percentage (%)"),
+    yaxis = list(title = "State or territory"),
+    margin = list(l = 80),
+    height = 950
+  )
+```
+
+For measure specifications and source data, see the [CMS Outpatient Imaging Efficiency dataset](https://data.cms.gov/provider-data/dataset/wkfw-kthe).

@@ -9,10 +9,16 @@ website:
       - href: index.qmd
         text: Home
       - href: explore.qmd
-        text: Explore Hospital Imaging
+        text: Explore
+      - href: ct-imaging.qmd
+        text: CT Imaging
+      - href: mammography.qmd
+        text: Mammography
       - href: story.qmd
-        text: Imaging Across the U.S.
-      - about.qmd
+        text: Hospital Comparisons
+    right:
+      - href: about.qmd
+        text: About
 
 format:
   html:

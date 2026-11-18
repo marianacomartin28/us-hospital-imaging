@@ -1,57 +1,59 @@
-
-
 ---
 title: "Explore Hospital Imaging Data"
+description: "Compare CMS outpatient imaging measure distributions and state or territory summaries."
+execute:
+  echo: false
+  warning: false
+  message: false
 ---
 
-## Explore Outpatient Imaging Measures
+## Explore the reported measures
 
-This interactive graph allows you to explore imaging measure percentages reported by hospitals across the United States.
-
-You can select an imaging measure, hover over the graph to see values, and zoom in on different parts of the distribution.
+These interactive charts use the CMS reporting period **July 1, 2024–June 30, 2025**. Each record is a hospital's reported percentage for one measure. Select or hide measures in the legend, and hover over marks for details.
 
 ```{r}
-#| warning: false
-#| message: false
-
 library(tidyverse)
 library(plotly)
 
-imaging_url <- "https://data.cms.gov/provider-data/sites/default/files/resources/d0134a9a89e59d49426cf5a2ad063b60_1785189966/Outpatient_Imaging_Efficiency-Hospital.csv"
+imaging_url <- "https://data.cms.gov/provider-data/sites/default/files/resources/d0134a9a89e59d49426cf5a2ad063b60_1792599881/Outpatient_Imaging_Efficiency-Hospital.csv"
 
-imaging_clean <- read_csv(imaging_url, show_col_types = FALSE) |>
+imaging <- read_csv(imaging_url, show_col_types = FALSE) |>
   filter(Score != "Not Available") |>
-  mutate(
-    Score = as.numeric(Score)
-  )
+  mutate(Score = as.numeric(Score))
 
-op10 <- imaging_clean |>
+op10 <- imaging |>
   filter(`Measure ID` == "OP-10")
 
-op39 <- imaging_clean |>
+op39 <- imaging |>
   filter(`Measure ID` == "OP-39")
+```
 
-p <- plot_ly() |>
+### Hospital score distributions
+
+Each bar counts hospitals whose reported percentage falls in that score range. The measures are overlaid for comparison; use the menu to view either measure alone.
+
+```{r}
+plot_ly() |>
   add_histogram(
     data = op10,
     x = ~Score,
     name = "OP-10: Abdomen CT",
     xbins = list(size = 1.5),
-    marker = list(color = "#1d4ed8"),
-    opacity = 0.7
+    marker = list(color = "#167d8d"),
+    opacity = 0.65
   ) |>
   add_histogram(
     data = op39,
     x = ~Score,
-    name = "OP-39: Breast Screening",
+    name = "OP-39: Breast screening",
     xbins = list(size = 1.5),
-    marker = list(color = "#d97706"),
-    opacity = 0.7
+    marker = list(color = "#d87850"),
+    opacity = 0.65
   ) |>
   layout(
-    title = "Hospital Imaging Measure Distributions",
-    xaxis = list(title = "Hospital Measure Percentage (%)"),
-    yaxis = list(title = "Number of Hospitals"),
+    title = "Distribution of Hospital-Reported Percentages",
+    xaxis = list(title = "Reported measure percentage (%)"),
+    yaxis = list(title = "Number of hospitals"),
     barmode = "overlay",
     updatemenus = list(
       list(
@@ -59,39 +61,74 @@ p <- plot_ly() |>
         buttons = list(
           list(
             method = "update",
-            args = list(
-              list(visible = c(TRUE, TRUE)),
-              list(title = "Both Imaging Measures")
-            ),
-            label = "Both Measures"
+            args = list(list(visible = c(TRUE, TRUE)),
+                        list(title = "Both imaging measures")),
+            label = "Both measures"
           ),
           list(
             method = "update",
-            args = list(
-              list(visible = c(TRUE, FALSE)),
-              list(title = "Abdomen CT (OP-10)")
-            ),
+            args = list(list(visible = c(TRUE, FALSE)),
+                        list(title = "Abdomen CT (OP-10)")),
             label = "Abdomen CT (OP-10)"
           ),
           list(
             method = "update",
-            args = list(
-              list(visible = c(FALSE, TRUE)),
-              list(title = "Breast Screening (OP-39)")
-            ),
-            label = "Breast Screening (OP-39)"
+            args = list(list(visible = c(FALSE, TRUE)),
+                        list(title = "Breast screening (OP-39)")),
+            label = "Breast screening (OP-39)"
           )
         )
       )
     )
   )
-
-p
 ```
 
-## Understanding the Measures
+### Compare state and territory medians
 
-- **OP-10:** Measures the use of contrast material in outpatient abdominal CT scans.
-- **OP-39:** Measures breast cancer screening recall rates.
+Bars show the median reported percentage among hospitals with an available score in each state or territory. A median summarizes a group; it is not a hospital rating, and differences can reflect many factors beyond care quality.
 
-These measures help illustrate differences in outpatient imaging practices across hospitals.
+```{r}
+state_summary <- imaging |>
+  group_by(State, `Measure ID`, `Measure Name`) |>
+  summarise(
+    median_score = median(Score),
+    hospitals = n(),
+    .groups = "drop"
+  ) |>
+  mutate(Measure = paste0(`Measure ID`, ": ", `Measure Name`))
+
+plot_ly(
+  data = state_summary,
+  x = ~median_score,
+  y = ~State,
+  color = ~Measure,
+  type = "bar",
+  orientation = "h",
+  text = ~paste0(
+    "Hospitals with scores: ", hospitals,
+    "<br>Median: ", round(median_score, 1), "%"
+  ),
+  hovertemplate = "%{y}<br>%{text}<extra>%{fullData.name}</extra>"
+) |>
+  layout(
+    title = "Median Reported Percentage by State or Territory",
+    barmode = "group",
+    xaxis = list(title = "Median reported measure percentage (%)"),
+    yaxis = list(
+      title = "State or territory",
+      categoryorder = "array",
+      categoryarray = sort(unique(state_summary$State)),
+      autorange = "reversed"
+    ),
+    legend = list(title = list(text = "CMS measure")),
+    margin = list(l = 80),
+    height = 950
+  )
+```
+
+## Measure guide
+
+- **OP-10 — Abdomen CT Use of Contrast Material:** The reported percentage of outpatient abdominal CT examinations performed both with and without contrast.
+- **OP-39 — Breast Cancer Screening Recall Rates:** The reported percentage of screening mammograms followed by diagnostic imaging within 45 days.
+
+The measures describe different processes and should not be read as a single score of hospital quality. The CMS dataset provides hospital-level reported percentages; it does not explain why a particular hospital's value differs.

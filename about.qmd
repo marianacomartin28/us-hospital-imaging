@@ -1,5 +1,19 @@
 ---
 title: "About"
+description: "About the student, project, and CMS outpatient imaging data."
 ---
 
-About this site
+## About Mariana
+
+This project was created by **Mariana Comartin** for a final college data science project.
+
+- **Email:** [m.comartin28@ncf.edu](mailto:m.comartin28@ncf.edu)
+- **GitHub:** [marianacomartin28](https://github.com/marianacomartin28)
+- **Project repository:** [marianacomartin28/milestone-5](https://github.com/marianacomartin28/milestone-5)
+- **College:** [New College of Florida](https://www.ncf.edu/)
+
+## Data source
+
+The analysis uses the Centers for Medicare & Medicaid Services (CMS) **Outpatient Imaging Efficiency – Hospital** dataset ([dataset ID: wkfw-kthe](https://data.cms.gov/provider-data/dataset/wkfw-kthe)). It contains hospital-level reported percentages for measures including abdomen CT use of contrast (OP-10) and breast cancer screening recall rates (OP-39), along with facility location and reporting-period fields. The charts describe these reported measures; they do not establish why hospitals differ or provide a complete assessment of care quality.
+
+For field definitions, see the [CMS hospital data dictionary (PDF)](https://data.cms.gov/provider-data/sites/default/files/data_dictionaries/hospital/HOSPITAL_Data_Dictionary.pdf).

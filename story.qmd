@@ -1,16 +1,71 @@
+---
+title: "Hospital Comparisons"
+description: "Explore hospital-level values for CMS outpatient imaging measures."
+execute:
+  echo: false
+  warning: false
+  message: false
+---
 
-# Imaging Across the United States
+## Compare hospitals reporting both measures
 
-## How Does Outpatient Imaging Differ Across Hospitals?
+Each point represents one hospital with available scores for both CMS measures during July 1, 2024–June 30, 2025. Hover over a point to see the hospital name, state, and both reported percentages.
 
-Medical imaging is an important part of modern healthcare. Hospitals use imaging technologies such as X-rays, CT scans, MRIs, and ultrasounds to help diagnose medical conditions.
+The measures describe different imaging processes and use different clinical contexts. This chart is for exploring reported values—not for ranking hospitals or interpreting the relationship as a measure of quality.
 
-However, imaging services and performance measures can vary between hospitals.
+```{r}
+library(tidyverse)
+library(plotly)
 
-This project examines outpatient imaging data from hospitals across the United States using publicly available CMS data.
+imaging_url <- "https://data.cms.gov/provider-data/sites/default/files/resources/d0134a9a89e59d49426cf5a2ad063b60_1792599881/Outpatient_Imaging_Efficiency-Hospital.csv"
 
-## Why Does This Matter?
+hospital_scores <- read_csv(imaging_url, show_col_types = FALSE) |>
+  mutate(
+    Score = na_if(Score, "Not Available"),
+    Score = as.numeric(Score)
+  ) |>
+  filter(!is.na(Score)) |>
+  select(`Facility ID`, `Facility Name`, State, `Measure ID`, Score) |>
+  pivot_wider(
+    names_from = `Measure ID`,
+    values_from = Score
+  ) |>
+  filter(!is.na(`OP-10`), !is.na(`OP-39`)) |>
+  rename(
+    ct_score = `OP-10`,
+    recall_score = `OP-39`
+  )
+```
 
-Understanding differences in outpatient imaging can help patients and healthcare professionals learn more about hospital performance, imaging services, and healthcare quality.
+## OP-10 and OP-39 reported percentages
 
-The data can also help identify patterns and differences between hospitals.
+Use the hover details to inspect individual facilities. Hospitals missing either score are not shown; missing values are not treated as zero.
+
+```{r}
+plot_ly(
+  data = hospital_scores,
+  x = ~ct_score,
+  y = ~recall_score,
+  type = "scatter",
+  mode = "markers",
+  text = ~paste0(
+    "Hospital: ", `Facility Name`,
+    "<br>State: ", State,
+    "<br>OP-10 abdomen CT: ", ct_score, "%",
+    "<br>OP-39 screening recall: ", recall_score, "%"
+  ),
+  marker = list(
+    color = "#167d8d",
+    opacity = 0.55,
+    size = 7
+  ),
+  hovertemplate = "%{text}<extra></extra>"
+) |>
+  layout(
+    title = "Hospital-Reported Imaging Measures",
+    xaxis = list(title = "OP-10 abdomen CT percentage (%)"),
+    yaxis = list(title = "OP-39 screening recall percentage (%)")
+  )
+```
+
+OP-10 tracks outpatient abdominal CT examinations performed both with and without contrast. OP-39 tracks screening mammograms followed by diagnostic imaging within 45 days. See the [CMS dataset](https://data.cms.gov/provider-data/dataset/wkfw-kthe) for the source records.

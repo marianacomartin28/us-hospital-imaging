@@ -1,0 +1,81 @@
+---
+title: "Mammography"
+description: "Explore CMS measure OP-39, Breast Cancer Screening Recall Rates."
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+## What OP-39 measures
+
+**OP-39 — Breast Cancer Screening Recall Rates** reports the percentage of screening mammograms followed by diagnostic imaging within 45 days. Follow-up may include additional mammography, ultrasound, or MRI.
+
+A recall can be a necessary part of screening, while unnecessary follow-up can add cost and anxiety. The rate alone cannot distinguish appropriate follow-up from avoidable callbacks, and it should not be treated as a stand-alone measure of a hospital's overall quality.
+
+The charts below use hospitals with an available OP-39 score in the July 1, 2024–June 30, 2025 reporting period.
+
+```{r}
+library(tidyverse)
+library(plotly)
+
+imaging_url <- "https://data.cms.gov/provider-data/sites/default/files/resources/d0134a9a89e59d49426cf5a2ad063b60_1792599881/Outpatient_Imaging_Efficiency-Hospital.csv"
+
+mammography_scores <- read_csv(imaging_url, show_col_types = FALSE) |>
+  filter(`Measure ID` == "OP-39", Score != "Not Available") |>
+  mutate(Score = as.numeric(Score))
+```
+
+## Distribution across hospitals
+
+Each bar counts reporting hospitals in a score range. Explore the shape of the distribution, but remember that the reported percentage is not a direct measure of cancer detection or patient outcomes.
+
+```{r}
+plot_ly(
+  data = mammography_scores,
+  x = ~Score,
+  type = "histogram",
+  xbins = list(size = 1.5),
+  marker = list(color = "#d87850")
+) |>
+  layout(
+    title = "OP-39 Breast Cancer Screening Recall Rates",
+    xaxis = list(title = "Reported OP-39 percentage (%)"),
+    yaxis = list(title = "Number of hospitals")
+  )
+```
+
+## Compare median scores by state or territory
+
+The state or territory median summarizes available hospital scores; it does not adjust for patient populations or clinical context and is not a ranking of care quality.
+
+```{r}
+mammography_by_state <- mammography_scores |>
+  group_by(State) |>
+  summarise(
+    median_score = median(Score),
+    hospitals = n(),
+    .groups = "drop"
+  ) |>
+  arrange(median_score)
+
+plot_ly(
+  data = mammography_by_state,
+  x = ~median_score,
+  y = ~reorder(State, median_score),
+  type = "bar",
+  orientation = "h",
+  marker = list(color = "#d87850"),
+  text = ~paste0("Hospitals with scores: ", hospitals),
+  hovertemplate = "%{y}<br>Median: %{x:.1f}%<br>%{text}<extra></extra>"
+) |>
+  layout(
+    title = "Median OP-39 Score by State or Territory",
+    xaxis = list(title = "Median reported percentage (%)"),
+    yaxis = list(title = "State or territory"),
+    margin = list(l = 80),
+    height = 950
+  )
+```
+
+For measure specifications and source data, see the [CMS Outpatient Imaging Efficiency dataset](https://data.cms.gov/provider-data/dataset/wkfw-kthe).

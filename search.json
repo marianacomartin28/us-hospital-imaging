@@ -77,13 +77,6 @@
     "text": "Contact\n\nEmail: m.comartin28@ncf.edu\nGitHub: marianacomartin28\nProject repository: View the GitHub repository\nCollege: New College of Florida"
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "U.S. Hospital Imaging Quality",
-    "section": "",
-    "text": "python3 - &lt;&lt;‘PY’ from pathlib import Path\np = Path(“index.qmd”) content = p.read_text()\nold = ‘filter(!is.na(Score), Measure ID %in% c(“OP-10”, “OP-39”))’ new = ‘dplyr::filter(!is.na(Score), Measure ID %in% c(“OP-10”, “OP-39”))’\nif old not in content: raise SystemExit(“No se encontró la línea esperada. No se modificó nada.”)\ncontent = content.replace(old, new, 1) p.write_text(content)\nprint(“Error corregido correctamente.”) PY"
-  },
-  {
     "objectID": "story.html",
     "href": "story.html",
     "title": "Hospital Comparisons",

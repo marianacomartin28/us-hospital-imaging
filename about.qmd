@@ -54,5 +54,5 @@ The visualizations are intended for educational exploration and should not be us
 
 - **Email:** [m.comartin28@ncf.edu](mailto:m.comartin28@ncf.edu)
 - **GitHub:** [marianacomartin28](https://github.com/marianacomartin28)
-- **Project repository:** [View the GitHub repository](https://github.com/marianacomartin28/milestone-5)
+- **Project repository:** [View the GitHub repository](https://github.com/marianacomartin28/us-hospital-imaging)
 - **College:** [New College of Florida](https://www.ncf.edu/)

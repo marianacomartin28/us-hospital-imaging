@@ -1,1 +1,139 @@
+---
+title: "Outpatient Medical Imaging Quality Across U.S. Hospitals"
+description: "Exploring hospital-reported CT imaging and breast screening measures across the United States."
+author: "Mariana Comartin"
+execute:
+  echo: false
+  warning: false
+  message: false
+---
 
+## Welcome
+
+Medical imaging plays an important role in diagnosing and monitoring health conditions. However, hospitals can report different results for the same imaging measures.
+
+This project explores outpatient imaging data from the Centers for Medicare & Medicaid Services (CMS), focusing on two measures:
+
+- **OP-10:** Abdomen CT Use of Contrast Material.
+- **OP-39:** Breast Cancer Screening Recall Rates.
+
+As someone interested in becoming an ultrasound technician, I wanted to explore how medical imaging practices vary across hospitals in the United States.
+
+## Imaging at a Glance
+
+These statistics are calculated directly from the CMS dataset.
+
+```{r}
+#| results: asis
+
+library(tidyverse)
+library(ggplot2)
+
+imaging_url <- "https://data.cms.gov/provider-data/sites/default/files/resources/d0134a9a89e59d49426cf5a2ad063b60_1792599881/Outpatient_Imaging_Efficiency-Hospital.csv"
+
+imaging <- read_csv(imaging_url, show_col_types = FALSE) |>
+  mutate(Score = suppressWarnings(as.numeric(Score))) |>
+  dplyr::filter(
+    !is.na(Score),
+    `Measure ID` %in% c("OP-10", "OP-39")
+  )
+
+summary_stats <- imaging |>
+  group_by(`Measure ID`) |>
+  summarise(
+    hospitals = n_distinct(`Facility ID`),
+    median_score = median(Score),
+    q25 = quantile(Score, 0.25),
+    q75 = quantile(Score, 0.75),
+    .groups = "drop"
+  )
+
+total_hospitals <- n_distinct(imaging$`Facility ID`)
+
+ct <- summary_stats |> dplyr::filter(`Measure ID` == "OP-10")
+mammo <- summary_stats |> dplyr::filter(`Measure ID` == "OP-39")
+
+cat('<div class="imaging-stats">')
+
+cat(sprintf(
+  '<div class="imaging-stat"><strong>%s</strong><span>Hospitals with available imaging scores</span></div>',
+  format(total_hospitals, big.mark = ",")
+))
+
+cat(sprintf(
+  '<div class="imaging-stat"><strong>%.1f%%</strong><span>Median OP-10 CT score</span></div>',
+  ct$median_score
+))
+
+cat(sprintf(
+  '<div class="imaging-stat"><strong>%.1f%%</strong><span>Median OP-39 recall rate</span></div>',
+  mammo$median_score
+))
+
+cat('</div>')
+```
+
+## Distribution of Imaging Measures
+
+The following visualization compares the distribution of reported percentages across hospitals.
+
+```{r}
+imaging_plot <- imaging |>
+  mutate(
+    Measure = case_when(
+      `Measure ID` == "OP-10" ~ "OP-10: Abdomen CT",
+      `Measure ID` == "OP-39" ~ "OP-39: Breast Screening"
+    )
+  )
+
+medians <- imaging_plot |>
+  group_by(Measure) |>
+  summarise(median_score = median(Score), .groups = "drop")
+
+ggplot(imaging_plot, aes(x = Score, fill = Measure)) +
+  geom_histogram(binwidth = 1.5, color = "white", alpha = 0.85) +
+  geom_vline(
+    data = medians,
+    aes(xintercept = median_score),
+    linetype = "dashed",
+    linewidth = 0.8,
+    inherit.aes = FALSE
+  ) +
+  facet_wrap(~Measure, ncol = 1, scales = "free_y") +
+  scale_fill_manual(values = c("#167d8d", "#d87850")) +
+  labs(
+    title = "Hospital-Reported Outpatient Imaging Percentages",
+    subtitle = "Distribution of OP-10 and OP-39 scores",
+    x = "Reported percentage (%)",
+    y = "Number of hospitals",
+    caption = "Source: CMS Outpatient Imaging Efficiency – Hospital"
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    legend.position = "none",
+    plot.title = element_text(face = "bold"),
+    strip.text = element_text(face = "bold")
+  )
+```
+
+## What Can We Learn?
+
+The distributions show that reported imaging percentages vary across hospitals. Most hospitals cluster within a relatively narrow range, while some report much higher percentages.
+
+These differences are worth exploring, but they do not automatically indicate better or worse care. Clinical circumstances and patient populations can influence reported measures.
+
+The two measures describe different processes and should not be combined into an overall hospital quality score.
+
+## Explore the Website
+
+Use the following pages to investigate the data:
+
+- **[Explore](explore.qmd):** Compare measures and investigate hospitals by state.
+- **[CT Imaging](ct-imaging.qmd):** Examine abdominal CT contrast use.
+- **[Mammography](mammography.qmd):** Explore breast screening recall rates.
+- **[Hospital Comparisons](story.qmd):** Discover patterns among hospitals reporting both measures.
+- **[About](about.qmd):** Learn about the project, data sources, and author.
+
+## Data Source
+
+This project uses the [CMS Outpatient Imaging Efficiency – Hospital dataset](https://data.cms.gov/provider-data/dataset/wkfw-kthe), reporting period July 2024–June 2025.

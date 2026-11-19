@@ -1,19 +1,58 @@
 ---
 title: "About"
-description: "About the student, project, and CMS outpatient imaging data."
+description: "About Mariana Comartin, the project, and the CMS imaging dataset."
 ---
 
-## About Mariana
+## About Me
 
-This project was created by **Mariana Comartin** for a final college data science project.
+Hi! I'm **Mariana Comartin**, a student at [New College of Florida](https://www.ncf.edu/) with an interest in healthcare and medical imaging.
+
+I'm interested in becoming an ultrasound technician, so I wanted to use this data science project to explore a topic connected to my future career.
+
+Medical imaging is an important part of patient care, but hospitals do not always report the same results. I wanted to understand how imaging measures vary across hospitals and states in the United States.
+
+## About This Project
+
+**U.S. Hospital Imaging Quality** is an interactive data visualization website built for a college data science project.
+
+The website examines two measures reported by the Centers for Medicare & Medicaid Services (CMS):
+
+- **OP-10 — Abdomen CT Use of Contrast Material:** The percentage of outpatient abdominal CT examinations performed both with and without contrast.
+- **OP-39 — Breast Cancer Screening Recall Rates:** The percentage of screening mammograms followed by diagnostic imaging within 45 days.
+
+The project includes interactive visualizations, comparisons between states, and an analysis of hospitals reporting both measures.
+
+The goal is to make the data easier to explore and understand, rather than to rank hospitals or determine which provides the best care.
+
+## Data Sources
+
+The data comes from the **Centers for Medicare & Medicaid Services (CMS)**.
+
+- [CMS Outpatient Imaging Efficiency — Hospital Dataset](https://data.cms.gov/provider-data/dataset/wkfw-kthe)
+- [CMS Hospital Data Dictionary (PDF)](https://data.cms.gov/provider-data/sites/default/files/data_dictionaries/hospital/HOSPITAL_Data_Dictionary.pdf)
+
+**Reporting period:** July 1, 2024 – June 30, 2025.
+
+## Tools Used
+
+This website was created using:
+
+- **R and tidyverse** for data cleaning and analysis.
+- **Plotly** for interactive visualizations.
+- **Quarto** for building the website.
+- **GitHub** for version control and publishing.
+
+## Important Limitations
+
+The reported percentages describe specific outpatient imaging processes, not overall hospital quality.
+
+Differences between hospitals may reflect patient populations, clinical circumstances, or reporting practices. The dataset does not explain why individual hospitals have different percentages.
+
+The visualizations are intended for educational exploration and should not be used to make medical decisions or choose a hospital.
+
+## Contact
 
 - **Email:** [m.comartin28@ncf.edu](mailto:m.comartin28@ncf.edu)
 - **GitHub:** [marianacomartin28](https://github.com/marianacomartin28)
-- **Project repository:** [marianacomartin28/milestone-5](https://github.com/marianacomartin28/milestone-5)
+- **Project repository:** [View the GitHub repository](https://github.com/marianacomartin28/milestone-5)
 - **College:** [New College of Florida](https://www.ncf.edu/)
-
-## Data source
-
-The analysis uses the Centers for Medicare & Medicaid Services (CMS) **Outpatient Imaging Efficiency – Hospital** dataset ([dataset ID: wkfw-kthe](https://data.cms.gov/provider-data/dataset/wkfw-kthe)). It contains hospital-level reported percentages for measures including abdomen CT use of contrast (OP-10) and breast cancer screening recall rates (OP-39), along with facility location and reporting-period fields. The charts describe these reported measures; they do not establish why hospitals differ or provide a complete assessment of care quality.
-
-For field definitions, see the [CMS hospital data dictionary (PDF)](https://data.cms.gov/provider-data/sites/default/files/data_dictionaries/hospital/HOSPITAL_Data_Dictionary.pdf).

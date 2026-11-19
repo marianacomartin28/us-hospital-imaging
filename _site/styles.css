@@ -108,3 +108,74 @@ a:hover {
     padding: 1rem;
   }
 }
+
+/* Milestone 7: Home statistics */
+
+.imaging-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0 2rem;
+}
+
+.imaging-stat {
+  background: #f0f7f8;
+  border: 1px solid #d7e8eb;
+  border-radius: 14px;
+  padding: 1.4rem 1rem;
+  text-align: center;
+}
+
+.imaging-stat strong {
+  display: block;
+  color: #17364b;
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.imaging-stat span {
+  display: block;
+  color: #526575;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+@media (max-width: 700px) {
+  .imaging-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Interactive State Explorer */
+
+.explorer-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 14px;
+  background: #f0f7f8;
+  border: 1px solid #d7e8eb;
+}
+
+.explorer-controls label {
+  font-weight: 600;
+  color: #17364b;
+}
+
+.explorer-controls select {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #b5ccd1;
+  background: white;
+  color: #17364b;
+  max-width: 100%;
+}
+
+#explorer-count {
+  font-weight: 600;
+  color: #526575;
+}

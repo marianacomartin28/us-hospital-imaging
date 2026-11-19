@@ -1,17 +1,12 @@
+
 ---
 title: "Hospital Comparisons"
-description: "Explore hospital-level values for CMS outpatient imaging measures."
+description: "A closer look at how outpatient CT and breast screening measures vary across U.S. hospitals."
 execute:
   echo: false
   warning: false
   message: false
 ---
-
-## Compare hospitals reporting both measures
-
-Each point represents one hospital with available scores for both CMS measures during July 1, 2024–June 30, 2025. Hover over a point to see the hospital name, state, and both reported percentages.
-
-The measures describe different imaging processes and use different clinical contexts. This chart is for exploring reported values—not for ranking hospitals or interpreting the relationship as a measure of quality.
 
 ```{r}
 library(tidyverse)
@@ -20,10 +15,7 @@ library(plotly)
 imaging_url <- "https://data.cms.gov/provider-data/sites/default/files/resources/d0134a9a89e59d49426cf5a2ad063b60_1792599881/Outpatient_Imaging_Efficiency-Hospital.csv"
 
 hospital_scores <- read_csv(imaging_url, show_col_types = FALSE) |>
-  mutate(
-    Score = na_if(Score, "Not Available"),
-    Score = as.numeric(Score)
-  ) |>
+  mutate(Score = suppressWarnings(as.numeric(Score))) |>
   filter(!is.na(Score)) |>
   select(`Facility ID`, `Facility Name`, State, `Measure ID`, Score) |>
   pivot_wider(
@@ -37,9 +29,76 @@ hospital_scores <- read_csv(imaging_url, show_col_types = FALSE) |>
   )
 ```
 
-## OP-10 and OP-39 reported percentages
+## The Story: Two Measures, Different Patterns
 
-Use the hover details to inspect individual facilities. Hospitals missing either score are not shown; missing values are not treated as zero.
+Hospitals across the United States report outpatient imaging measures to the Centers for Medicare & Medicaid Services (CMS). Two of these measures describe different parts of medical imaging: **OP-10**, the percentage of outpatient abdominal CT examinations performed both with and without contrast material, and **OP-39**, the percentage of breast cancer screening examinations followed by additional imaging within 45 days.
+
+A natural question is whether hospitals reporting higher percentages for one measure also tend to report higher percentages for the other. Because these measures concern different procedures and patient populations, any relationship must be interpreted carefully.
+
+## What Do the Hospital-Level Data Show?
+
+```{r}
+#| fig-width: 9
+#| fig-height: 5.5
+#| fig-dpi: 200
+
+ggplot(
+  hospital_scores,
+  aes(x = ct_score, y = recall_score)
+) +
+  geom_point(
+    color = "#167d8d",
+    alpha = 0.3,
+    size = 1.6
+  ) +
+  geom_vline(
+    xintercept = median(hospital_scores$ct_score),
+    linetype = "dashed",
+    color = "#d87850"
+  ) +
+  geom_hline(
+    yintercept = median(hospital_scores$recall_score),
+    linetype = "dashed",
+    color = "#d87850"
+  ) +
+  labs(
+    title = "How Do CT and Breast Screening Measures Compare?",
+    subtitle = paste0(
+      format(nrow(hospital_scores), big.mark = ","),
+      " hospitals with both reported measures"
+    ),
+    x = "OP-10: Abdominal CT with and without contrast (%)",
+    y = "OP-39: Breast screening recall (%)",
+    caption = "Dashed lines show medians among hospitals reporting both measures. Source: CMS."
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = "bold", color = "#17364b"),
+    plot.subtitle = element_text(color = "#475569"),
+    panel.grid.minor = element_blank(),
+    plot.caption = element_text(color = "#64748b")
+  )
+```
+
+```{r}
+summary_stats <- hospital_scores |>
+  summarise(
+    n = n(),
+    median_ct = median(ct_score),
+    median_recall = median(recall_score),
+    correlation = cor(ct_score, recall_score, method = "spearman")
+  )
+```
+
+The chart includes **`r format(summary_stats$n, big.mark = ",")` hospitals** with valid values for both measures. The median OP-10 percentage in this group is **`r sprintf("%.1f", summary_stats$median_ct)`%**, while the median OP-39 percentage is **`r sprintf("%.1f", summary_stats$median_recall)`%**. The Spearman rank correlation between the two measures is **`r sprintf("%.2f", summary_stats$correlation)`**, which describes how strongly their reported percentages tend to move together across hospitals.
+
+The points also show that hospitals can have quite different combinations of CT and breast screening percentages. This is an important limitation of using one number to describe a facility: **neither measure alone provides a complete assessment of hospital quality**. Differences may reflect clinical practices, patient populations, or other factors that cannot be established from this dataset.
+
+## Explore Individual Hospitals
+
+The fixed chart above tells the overall story. The interactive version below lets you investigate individual facilities.
+
+**How to use it:** Hover over any point to see the hospital name, state, and both reported percentages. You can also zoom into clusters of hospitals.
 
 ```{r}
 plot_ly(
@@ -51,21 +110,25 @@ plot_ly(
   text = ~paste0(
     "Hospital: ", `Facility Name`,
     "<br>State: ", State,
-    "<br>OP-10 abdomen CT: ", ct_score, "%",
-    "<br>OP-39 screening recall: ", recall_score, "%"
+    "<br>OP-10 abdominal CT: ", ct_score, "%",
+    "<br>OP-39 breast screening recall: ", recall_score, "%"
   ),
   marker = list(
     color = "#167d8d",
-    opacity = 0.55,
+    opacity = 0.5,
     size = 7
   ),
   hovertemplate = "%{text}<extra></extra>"
 ) |>
   layout(
-    title = "Hospital-Reported Imaging Measures",
-    xaxis = list(title = "OP-10 abdomen CT percentage (%)"),
-    yaxis = list(title = "OP-39 screening recall percentage (%)")
+    title = "Interactive Hospital Comparisons",
+    xaxis = list(title = "OP-10 abdominal CT (%)"),
+    yaxis = list(title = "OP-39 breast screening recall (%)")
   )
 ```
 
-OP-10 tracks outpatient abdominal CT examinations performed both with and without contrast. OP-39 tracks screening mammograms followed by diagnostic imaging within 45 days. See the [CMS dataset](https://data.cms.gov/provider-data/dataset/wkfw-kthe) for the source records.
+## Key Takeaway
+
+This comparison highlights why hospital imaging statistics require context. Even when two measures are reported by the same facility, they describe different clinical processes and should not automatically be interpreted as indicators of overall performance.
+
+For more information, visit the [CMS Outpatient Imaging Efficiency dataset](https://data.cms.gov/provider-data/dataset/wkfw-kthe).

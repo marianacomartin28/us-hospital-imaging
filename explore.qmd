@@ -126,6 +126,117 @@ plot_ly(
   )
 ```
 
+
+## Interactive State Explorer
+
+Choose a state or territory and an imaging measure to explore individual hospital scores. The chart updates instantly without reloading the page.
+
+```{r}
+#| results: asis
+
+library(htmltools)
+
+state_data <- imaging |>
+  dplyr::filter(
+    `Measure ID` %in% c("OP-10", "OP-39"),
+    !is.na(Score),
+    !is.na(State),
+    !is.na(`Facility Name`)
+  ) |>
+  dplyr::arrange(State, `Facility Name`)
+
+state_choices <- sort(unique(state_data$State))
+
+cat('<div class="explorer-controls">')
+cat('<label for="state-select">State or territory</label>')
+cat('<select id="state-select">')
+for (s in state_choices) {
+  cat(sprintf('<option value="%s">%s</option>',
+              htmlEscape(s, attribute = TRUE),
+              htmlEscape(s)))
+}
+cat('</select>')
+
+cat('<label for="measure-select">Imaging measure</label>')
+cat('<select id="measure-select">')
+cat('<option value="OP-10">OP-10: Abdomen CT</option>')
+cat('<option value="OP-39">OP-39: Breast screening</option>')
+cat('</select>')
+cat('</div>')
+
+cat('<p id="explorer-count"></p>')
+cat('<div id="hospital-explorer" style="width:100%;height:600px;"></div>')
+```
+
+```{r}
+#| results: asis
+
+library(jsonlite)
+
+explorer_json <- state_data |>
+  dplyr::transmute(
+    state = State,
+    measure = `Measure ID`,
+    hospital = `Facility Name`,
+    score = Score
+  ) |>
+  jsonlite::toJSON(dataframe = "rows", auto_unbox = TRUE)
+
+cat('<script>')
+cat('const hospitalData = ', explorer_json, ';', sep = '')
+cat('
+(function () {
+  const stateSelect = document.getElementById("state-select");
+  const measureSelect = document.getElementById("measure-select");
+  const chart = document.getElementById("hospital-explorer");
+  const count = document.getElementById("explorer-count");
+
+  function updateExplorer() {
+    const state = stateSelect.value;
+    const measure = measureSelect.value;
+
+    const selected = hospitalData
+      .filter(d => d.state === state && d.measure === measure)
+      .sort((a, b) => a.score - b.score);
+
+    count.textContent =
+      selected.length + " hospitals with available scores in " + state;
+
+    const trace = {
+      x: selected.map(d => d.score),
+      y: selected.map(d => d.hospital),
+      type: "bar",
+      orientation: "h",
+      marker: {
+        color: measure === "OP-10" ? "#167d8d" : "#d87850"
+      },
+      hovertemplate: "%{y}<br>Reported score: %{x:.1f}%<extra></extra>"
+    };
+
+    const layout = {
+      title: state + " — " + measure,
+      xaxis: {title: "Reported percentage (%)", rangemode: "tozero"},
+      yaxis: {automargin: true},
+      margin: {l: 200, r: 30, t: 65, b: 65},
+      height: Math.max(450, selected.length * 20 + 140)
+    };
+
+    Plotly.react(chart, [trace], layout, {responsive: true});
+  }
+
+  stateSelect.addEventListener("change", updateExplorer);
+  measureSelect.addEventListener("change", updateExplorer);
+
+  updateExplorer();
+})();
+')
+cat('</script>')
+```
+
+The chart displays available hospital-reported percentages, not a ranking of clinical quality. Hospitals with missing scores are excluded. Differences may reflect patient populations, reporting practices, and clinical circumstances.
+
+---
+
 ## Measure guide
 
 - **OP-10 — Abdomen CT Use of Contrast Material:** The reported percentage of outpatient abdominal CT examinations performed both with and without contrast.

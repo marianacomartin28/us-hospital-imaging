@@ -1,2 +1,5 @@
 /.quarto/
 **/*.quarto_ipynb
+
+# Quarto installer
+quarto-linux-amd64.deb

@@ -24,6 +24,49 @@ ct_scores <- read_csv(imaging_url, show_col_types = FALSE) |>
   mutate(Score = as.numeric(Score))
 ```
 
+
+## OP-10 at a Glance
+
+Before exploring the charts, these summary statistics show how the reported abdominal CT percentages vary across hospitals.
+
+```{r}
+#| results: asis
+
+ct_stats <- ct_scores |>
+  summarise(
+    hospitals = n_distinct(`Facility ID`),
+    median_score = median(Score, na.rm = TRUE),
+    q25 = quantile(Score, 0.25, na.rm = TRUE),
+    q75 = quantile(Score, 0.75, na.rm = TRUE)
+  )
+
+cat('<div class="imaging-stats">')
+
+cat(sprintf(
+  '<div class="imaging-stat"><strong>%s</strong><span>Hospitals reporting OP-10</span></div>',
+  format(ct_stats$hospitals, big.mark = ",")
+))
+
+cat(sprintf(
+  '<div class="imaging-stat"><strong>%.1f%%</strong><span>Median reported OP-10 score</span></div>',
+  ct_stats$median_score
+))
+
+cat(sprintf(
+  '<div class="imaging-stat"><strong>%.1f%%–%.1f%%</strong><span>Middle 50%% of hospital scores</span></div>',
+  ct_stats$q25,
+  ct_stats$q75
+))
+
+cat('</div>')
+```
+
+The middle 50% of hospitals provides a useful picture of typical variation, without allowing a small number of unusually high percentages to dominate the comparison.
+
+These statistics describe reported CT imaging practices. They do not establish whether an individual scan was clinically appropriate.
+
+---
+
 ## Distribution across hospitals
 
 Each bar represents the number of reporting hospitals in a score range. The interactive chart lets you inspect individual bins; the percentage is the CMS-reported score, not a patient-level rate calculated here.

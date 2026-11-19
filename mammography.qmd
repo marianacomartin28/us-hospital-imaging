@@ -26,6 +26,53 @@ mammography_scores <- read_csv(imaging_url, show_col_types = FALSE) |>
   mutate(Score = as.numeric(Score))
 ```
 
+
+## OP-39 at a Glance
+
+These statistics summarize the reported breast screening recall percentages across hospitals. A recall means that additional diagnostic imaging followed a screening mammogram within 45 days.
+
+```{r}
+#| results: asis
+
+mammo_stats <- mammography_scores |>
+  summarise(
+    hospitals = n_distinct(`Facility ID`),
+    median_score = median(Score, na.rm = TRUE),
+    q25 = quantile(Score, 0.25, na.rm = TRUE),
+    q75 = quantile(Score, 0.75, na.rm = TRUE)
+  )
+
+cat('<div class="imaging-stats">')
+
+cat(sprintf(
+  '<div class="imaging-stat"><strong>%s</strong><span>Hospitals reporting OP-39</span></div>',
+  format(mammo_stats$hospitals, big.mark = ",")
+))
+
+cat(sprintf(
+  '<div class="imaging-stat"><strong>%.1f%%</strong><span>Median breast screening recall rate</span></div>',
+  mammo_stats$median_score
+))
+
+cat(sprintf(
+  '<div class="imaging-stat"><strong>%.1f%%–%.1f%%</strong><span>Middle 50%% of hospital scores</span></div>',
+  mammo_stats$q25,
+  mammo_stats$q75
+))
+
+cat('</div>')
+```
+
+### Understanding Recall Rates
+
+A screening mammogram may identify an area that requires further examination. In these cases, a patient may be called back for additional mammography, ultrasound, or other diagnostic imaging.
+
+Recall rates matter because unnecessary callbacks can create anxiety, extra appointments, and additional costs. However, follow-up imaging can also be essential for investigating suspicious findings.
+
+**A lower recall rate is not automatically better.** Interpreting these percentages requires clinical context, including the patients being screened and the reasons for additional imaging.
+
+---
+
 ## Distribution across hospitals
 
 Each bar counts reporting hospitals in a score range. Explore the shape of the distribution, but remember that the reported percentage is not a direct measure of cancer detection or patient outcomes.

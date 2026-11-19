@@ -77,6 +77,55 @@
     "text": "Contact\n\nEmail: m.comartin28@ncf.edu\nGitHub: marianacomartin28\nProject repository: View the GitHub repository\nCollege: New College of Florida"
   },
   {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Outpatient Medical Imaging Quality Across U.S. Hospitals",
+    "section": "",
+    "text": "Medical imaging plays an important role in diagnosing and monitoring health conditions. However, hospitals can report different results for the same imaging measures.\nThis project explores outpatient imaging data from the Centers for Medicare & Medicaid Services (CMS), focusing on two measures:\n\nOP-10: Abdomen CT Use of Contrast Material.\nOP-39: Breast Cancer Screening Recall Rates.\n\nAs someone interested in becoming an ultrasound technician, I wanted to explore how medical imaging practices vary across hospitals in the United States."
+  },
+  {
+    "objectID": "index.html#welcome",
+    "href": "index.html#welcome",
+    "title": "Outpatient Medical Imaging Quality Across U.S. Hospitals",
+    "section": "",
+    "text": "Medical imaging plays an important role in diagnosing and monitoring health conditions. However, hospitals can report different results for the same imaging measures.\nThis project explores outpatient imaging data from the Centers for Medicare & Medicaid Services (CMS), focusing on two measures:\n\nOP-10: Abdomen CT Use of Contrast Material.\nOP-39: Breast Cancer Screening Recall Rates.\n\nAs someone interested in becoming an ultrasound technician, I wanted to explore how medical imaging practices vary across hospitals in the United States."
+  },
+  {
+    "objectID": "index.html#imaging-at-a-glance",
+    "href": "index.html#imaging-at-a-glance",
+    "title": "Outpatient Medical Imaging Quality Across U.S. Hospitals",
+    "section": "Imaging at a Glance",
+    "text": "Imaging at a Glance\nThese statistics are calculated directly from the CMS dataset.\n\n\n3,982Hospitals with available imaging scores\n\n\n5.0%Median OP-10 CT score\n\n\n6.6%Median OP-39 recall rate"
+  },
+  {
+    "objectID": "index.html#distribution-of-imaging-measures",
+    "href": "index.html#distribution-of-imaging-measures",
+    "title": "Outpatient Medical Imaging Quality Across U.S. Hospitals",
+    "section": "Distribution of Imaging Measures",
+    "text": "Distribution of Imaging Measures\nThe following visualization compares the distribution of reported percentages across hospitals."
+  },
+  {
+    "objectID": "index.html#what-can-we-learn",
+    "href": "index.html#what-can-we-learn",
+    "title": "Outpatient Medical Imaging Quality Across U.S. Hospitals",
+    "section": "What Can We Learn?",
+    "text": "What Can We Learn?\nThe distributions show that reported imaging percentages vary across hospitals. Most hospitals cluster within a relatively narrow range, while some report much higher percentages.\nThese differences are worth exploring, but they do not automatically indicate better or worse care. Clinical circumstances and patient populations can influence reported measures.\nThe two measures describe different processes and should not be combined into an overall hospital quality score."
+  },
+  {
+    "objectID": "index.html#explore-the-website",
+    "href": "index.html#explore-the-website",
+    "title": "Outpatient Medical Imaging Quality Across U.S. Hospitals",
+    "section": "Explore the Website",
+    "text": "Explore the Website\nUse the following pages to investigate the data:\n\nExplore: Compare measures and investigate hospitals by state.\nCT Imaging: Examine abdominal CT contrast use.\nMammography: Explore breast screening recall rates.\nHospital Comparisons: Discover patterns among hospitals reporting both measures.\nAbout: Learn about the project, data sources, and author."
+  },
+  {
+    "objectID": "index.html#data-source",
+    "href": "index.html#data-source",
+    "title": "Outpatient Medical Imaging Quality Across U.S. Hospitals",
+    "section": "Data Source",
+    "text": "Data Source\nThis project uses the CMS Outpatient Imaging Efficiency – Hospital dataset, reporting period July 2024–June 2025."
+  },
+  {
     "objectID": "story.html",
     "href": "story.html",
     "title": "Hospital Comparisons",

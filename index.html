@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Mariana Comartin">
+<meta name="description" content="Exploring hospital-reported CT imaging and breast screening measures across the United States.">
 
-<title>U.S. Hospital Imaging Quality</title>
+<title>Outpatient Medical Imaging Quality Across U.S. Hospitals – U.S. Hospital Imaging Quality</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -133,17 +135,114 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#welcome" id="toc-welcome" class="nav-link active" data-scroll-target="#welcome">Welcome</a></li>
+  <li><a href="#imaging-at-a-glance" id="toc-imaging-at-a-glance" class="nav-link" data-scroll-target="#imaging-at-a-glance">Imaging at a Glance</a></li>
+  <li><a href="#distribution-of-imaging-measures" id="toc-distribution-of-imaging-measures" class="nav-link" data-scroll-target="#distribution-of-imaging-measures">Distribution of Imaging Measures</a></li>
+  <li><a href="#what-can-we-learn" id="toc-what-can-we-learn" class="nav-link" data-scroll-target="#what-can-we-learn">What Can We Learn?</a></li>
+  <li><a href="#explore-the-website" id="toc-explore-the-website" class="nav-link" data-scroll-target="#explore-the-website">Explore the Website</a></li>
+  <li><a href="#data-source" id="toc-data-source" class="nav-link" data-scroll-target="#data-source">Data Source</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content" tabindex="-1"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content" id="quarto-document-content" tabindex="-1">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Outpatient Medical Imaging Quality Across U.S. Hospitals</h1>
+</div>
+
+<div>
+  <div class="description">
+    Exploring hospital-reported CT imaging and breast screening measures across the United States.
+  </div>
+</div>
 
 
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Mariana Comartin </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
 
 
+</header>
 
 
+<section id="welcome" class="level2">
+<h2 class="anchored" data-anchor-id="welcome">Welcome</h2>
+<p>Medical imaging plays an important role in diagnosing and monitoring health conditions. However, hospitals can report different results for the same imaging measures.</p>
+<p>This project explores outpatient imaging data from the Centers for Medicare &amp; Medicaid Services (CMS), focusing on two measures:</p>
+<ul>
+<li><strong>OP-10:</strong> Abdomen CT Use of Contrast Material.</li>
+<li><strong>OP-39:</strong> Breast Cancer Screening Recall Rates.</li>
+</ul>
+<p>As someone interested in becoming an ultrasound technician, I wanted to explore how medical imaging practices vary across hospitals in the United States.</p>
+</section>
+<section id="imaging-at-a-glance" class="level2">
+<h2 class="anchored" data-anchor-id="imaging-at-a-glance">Imaging at a Glance</h2>
+<p>These statistics are calculated directly from the CMS dataset.</p>
+<div class="imaging-stats">
+<div class="imaging-stat">
+<strong>3,982</strong><span>Hospitals with available imaging scores</span>
+</div>
+<div class="imaging-stat">
+<strong>5.0%</strong><span>Median OP-10 CT score</span>
+</div>
+<div class="imaging-stat">
+<strong>6.6%</strong><span>Median OP-39 recall rate</span>
+</div>
+</div>
+</section>
+<section id="distribution-of-imaging-measures" class="level2">
+<h2 class="anchored" data-anchor-id="distribution-of-imaging-measures">Distribution of Imaging Measures</h2>
+<p>The following visualization compares the distribution of reported percentages across hospitals.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="what-can-we-learn" class="level2">
+<h2 class="anchored" data-anchor-id="what-can-we-learn">What Can We Learn?</h2>
+<p>The distributions show that reported imaging percentages vary across hospitals. Most hospitals cluster within a relatively narrow range, while some report much higher percentages.</p>
+<p>These differences are worth exploring, but they do not automatically indicate better or worse care. Clinical circumstances and patient populations can influence reported measures.</p>
+<p>The two measures describe different processes and should not be combined into an overall hospital quality score.</p>
+</section>
+<section id="explore-the-website" class="level2">
+<h2 class="anchored" data-anchor-id="explore-the-website">Explore the Website</h2>
+<p>Use the following pages to investigate the data:</p>
+<ul>
+<li><strong><a href="./explore.html">Explore</a>:</strong> Compare measures and investigate hospitals by state.</li>
+<li><strong><a href="./ct-imaging.html">CT Imaging</a>:</strong> Examine abdominal CT contrast use.</li>
+<li><strong><a href="./mammography.html">Mammography</a>:</strong> Explore breast screening recall rates.</li>
+<li><strong><a href="./story.html">Hospital Comparisons</a>:</strong> Discover patterns among hospitals reporting both measures.</li>
+<li><strong><a href="./about.html">About</a>:</strong> Learn about the project, data sources, and author.</li>
+</ul>
+</section>
+<section id="data-source" class="level2">
+<h2 class="anchored" data-anchor-id="data-source">Data Source</h2>
+<p>This project uses the <a href="https://data.cms.gov/provider-data/dataset/wkfw-kthe">CMS Outpatient Imaging Efficiency – Hospital dataset</a>, reporting period July 2024–June 2025.</p>
+
+
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
